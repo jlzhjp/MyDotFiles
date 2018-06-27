@@ -6,7 +6,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'wincent/terminus'
-Plug 'jlzhjp/VimPair', { 'branch': 'dev' }
+Plug 'jlzhjp/vim-pair',
 Plug 'ervandew/supertab', { 'for': 'cpp' }
 
 call plug#end()
@@ -35,7 +35,7 @@ set encoding=utf-8
 set expandtab
 set foldenable
 set foldmethod=marker
-set guifont=Source\ Code\ Pro\ for\ Powerline\ 11
+set guifont=Source\ Code\ Pro\ 11
 set guioptions-=m
 set guioptions-=T
 set hlsearch
@@ -96,21 +96,3 @@ nnoremap <Up> <C-w><C-k>
 nnoremap <Down> <C-w><C-j>
 nnoremap <Leader><Tab> :bn<Cr>
 
-"!If you have special needs, just use the default config
-"Other options will be set to default
-"let g:DisableVimPair = 0
-augroup UpdateVimPairConfig
-  autocmd!
-  let g:VpGlobalConfig = {
-        \'keyBinding': {
-        \  'tab': '<Tab>',
-        \},
-        \}
-  autocmd FileType vim let b:VpConfig = {
-        \'closing': [
-        \  { 'open': '(', 'close': ')', },
-        \  { 'open': '[', 'close': ']', },
-        \  { 'open': "'", 'close': "'", },
-        \  ],
-        \}
-augroup END
