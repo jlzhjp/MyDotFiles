@@ -1,0 +1,4 @@
+rofi.combi-modi:    window,drun
+rofi.theme:         sidetab
+rofi.font:          Noto Sans CJK 10
+rofi.modi:          window,drun,combi
