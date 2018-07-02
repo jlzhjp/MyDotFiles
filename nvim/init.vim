@@ -5,17 +5,20 @@
 "--------------------------------------
 call plug#begin("~/.config/nvim/plugged")
 
+Plug 'tpope/vim-sensible'
+
+Plug 'justinmk/vim-sneak'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'jlzhjp/VimPair', { 'branch': 'dev' }
+Plug 'jlzhjp/vim-pair'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
 Plug 'Yggdroot/indentLine'
 Plug 'kshenoy/vim-signature'
-
+Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
@@ -25,7 +28,12 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 
-Plug 'Valloric/YouCompleteMe'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-clang'
+Plug 'carlitux/deoplete-ternjs'
+Plug 'pkosel/deoplete-omnisharp'
+
+Plug 'tpope/vim-repeat'
 Plug 'SirVer/ultisnips'
 Plug 'Chiel92/vim-autoformat'
 
@@ -35,7 +43,6 @@ Plug 'joshdick/onedark.vim'
 
 Plug 'OrangeT/vim-csharp'
 Plug 'pangloss/vim-javascript'
-Plug 'othree/xml.vim'
 Plug 'bfrg/vim-cpp-modern'
 
 call plug#end()
@@ -50,11 +57,9 @@ filetype plugin on
 filetype plugin indent on
 
 "--------------------------------------
-
 "======================================
 "============== Settings ==============
 "======================================
-
 "--------------------------------------
 set autoindent
 set autoread
@@ -63,19 +68,13 @@ set autowriteall
 set background=dark
 set backup
 set backupdir=~/.config/nvim/backup
-set backspace=indent,eol,start
 set cc=80
-set clipboard+=unnamedplus
 set cursorline
 set copyindent
-set completeopt=menu,preview
-set cindent
-set cinoptions={0,:0,g0,l1,t0,(0,N-s
 set encoding=utf-8
 set expandtab
 set foldenable
-set fillchars=vert:\ ,stl:\ ,stlnc:\
-set guifont=Fira\ Mono\ 11
+set guifont=Source\ Code\ Pro\ 11
 set guioptions-=m
 set guioptions-=T
 set hlsearch
@@ -86,8 +85,6 @@ set lazyredraw
 set mouse=a
 set mousehide
 set number
-set noerrorbells
-set novisualbell
 set relativenumber
 set scrolloff=10
 set smartcase
@@ -100,16 +97,12 @@ set tm=500
 set tabstop=4
 set termguicolors
 set undolevels=100
-set wildmenu
-set whichwrap=h,l,b,s,<,>,[,] 
 
 "--------------------------------------
-
 "--------------------------------------
 "======================================
 "============ KeyBindings =============
 "======================================
-
 "--------------------------------------
 
 let mapleader=';'
@@ -141,66 +134,51 @@ map . <Plug>(easymotion-repeat)
 "Autoformat
 nnoremap <C-k> :Autoformat<Cr>
 
-" Ycm
-nnoremap <Leader>gl :YcmCompleter GoToDeclaration<CR>
-nnoremap <Leader>gf :YcmCompleter GoToDefinition<CR>
-nnoremap <Leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <Leader>fi :YcmCompleter FixIt<CR>
-
 " 切换文件
-nnoremap <Leader><TAB> :bn<CR>
+nnoremap <Leader><Tab> :bn<CR>
 nnoremap <Leader>c :bd<CR>
 
-" 复制 粘贴到系统剪切板
-noremap <Leader>p "+p
-noremap <Leader>P "+P
-noremap <Leader>yy "+yy
-noremap <Leader>yG "+yG
-vnoremap <Leader>y "+y
-
 "--------------------------------------
-
 "======================================
-"============== AutoCmd ===============
+"=========== AutoCommands =============
 "======================================
-
 "--------------------------------------
 
 augroup PreviewOnBottom
-    autocmd InsertEnter * set splitbelow
-    autocmd InsertLeave * set splitbelow!
+  autocmd InsertEnter * set splitbelow
+  autocmd InsertLeave * set splitbelow!
 augroup END
 
 augroup IndentSetting
-    autocmd!
-    autocmd FileType vim setlocal shiftwidth=2
-                \|setlocal tabstop=2
-                \|setlocal softtabstop=2
-    autocmd FileType javascript setlocal shiftwidth=2
-                \|setlocal tabstop=2
-                \|setlocal softtabstop=2
-    autocmd FileType python setlocal shiftwidth=2
-                \|setlocal tabstop=2
-                \|setlocal softtabstop=2
+  autocmd!
+  autocmd FileType vim setlocal shiftwidth=2
+        \|setlocal tabstop=2
+        \|setlocal softtabstop=2
+  autocmd FileType javascript setlocal shiftwidth=2
+        \|setlocal tabstop=2
+        \|setlocal softtabstop=2
+  autocmd FileType python setlocal shiftwidth=2
+        \|setlocal tabstop=2
+        \|setlocal softtabstop=2
 augroup END
 
 " autocmd vimenter * TagbarToggle
 " autocmd vimenter * NERDTree
 
 "--------------------------------------
-
 "======================================
 "=============== Config ===============
 "======================================
-
 "--------------------------------------
+let g:deoplete#enable_at_startup = 1
+
 "<<easymotion>>
 let g:EasyMotion_smartcase = 1
 
 "<<airline>>
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'base16'
+let g:airline_theme = 'onedark'
 
 "<<multiple-cursor>>
 let g:multi_cursor_use_default_mapping=0
@@ -232,10 +210,9 @@ let g:UltiSnipsJumpForwardTrigger = "<C-l>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-n>"
 let g:UltiSnipsEditSplit = "vertical"
 
-"<<YouCompleteMe>>
-let g:ycm_error_symbol = '✘'
-let g:ycm_warning_symbol = '!'
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_autoclose_preview_window_after_completion = 0
-let g:ycm_python_binary_path = 'python'
+
+"--------------------------------------
+"======================================
+"============ Functions ===============
+"======================================
+"--------------------------------------
