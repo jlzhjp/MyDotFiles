@@ -13,6 +13,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'jlzhjp/vim-pair'
+Plug 'Chiel92/vim-autoformat'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -30,13 +31,12 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-clang'
 Plug 'carlitux/deoplete-ternjs'
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
-Plug 'Chiel92/vim-autoformat'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 
 Plug 'morhetz/gruvbox'
 Plug 'lifepillar/vim-solarized8'
@@ -106,23 +106,22 @@ set undolevels=100
 "=========== AutoCommands =============
 "======================================
 "--------------------------------------
-
 augroup PreviewOnBottom
-  autocmd InsertEnter * set splitbelow
-  autocmd InsertLeave * set splitbelow!
+    autocmd InsertEnter * set splitbelow
+    autocmd InsertLeave * set splitbelow!
 augroup END
 
 augroup IndentSetting
-  autocmd!
-  autocmd FileType vim setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-  autocmd FileType javascript setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-  autocmd FileType python setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
+    autocmd!
+    autocmd FileType vim setlocal shiftwidth=2
+                \|setlocal tabstop=2
+                \|setlocal softtabstop=2
+    autocmd FileType javascript setlocal shiftwidth=2
+                \|setlocal tabstop=2
+                \|setlocal softtabstop=2
+    autocmd FileType python setlocal shiftwidth=2
+                \|setlocal tabstop=2
+                \|setlocal softtabstop=2
 augroup END
 
 "--------------------------------------
@@ -143,9 +142,9 @@ nnoremap <silent> <F2> :NERDTreeToggle<CR>
 nnoremap <silent> <F4> :UndotreeToggle<CR>
 nnoremap <silent> <F8> :TagbarToggle<CR>
 
-nnoremap <silent> <C-k> :Autoformat<CR>
+nnoremap <silent> <Leader>f :Autoformat<CR>
 
-nnoremap <silent> <C-Tab> :bn<CR>
+nnoremap <S-Tab> :bn<CR>
 nnoremap <silent> <C-c> :bd<CR>
 
 nnoremap <silent> <Leader>h :split<CR>
@@ -161,6 +160,10 @@ map <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
 map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
 map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
 map <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
+
+imap <C-j> <Plug>(neosnippet_expand_or_jump)
+smap <C-j> <Plug>(neosnippet_expand_or_jump)
+xmap <C-j> <Plug>(neosnippet_expand_target)
 
 "--------------------------------------
 "======================================
