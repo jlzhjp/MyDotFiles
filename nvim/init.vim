@@ -11,6 +11,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'jlzhjp/vim-pair'
 
 Plug 'vim-airline/vim-airline'
@@ -31,10 +32,10 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-clang'
 Plug 'carlitux/deoplete-ternjs'
-Plug 'pkosel/deoplete-omnisharp'
 
-Plug 'tpope/vim-repeat'
 Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
 Plug 'Chiel92/vim-autoformat'
 
 Plug 'morhetz/gruvbox'
@@ -68,18 +69,23 @@ set autowriteall
 set background=dark
 set backup
 set backupdir=~/.config/nvim/backup
-set cc=80
+set colorcolumn=80
 set cursorline
 set copyindent
-set encoding=utf-8
+set encoding=UTF-8
 set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 set foldenable
 set guifont=Source\ Code\ Pro\ 11
 set guioptions-=m
 set guioptions-=T
-set hlsearch
+set winheight=50
+set winwidth=150
 set hidden
 set history=100
+set hlsearch
 set incsearch
 set lazyredraw
 set mouse=a
@@ -89,54 +95,11 @@ set relativenumber
 set scrolloff=10
 set smartcase
 set showmatch
-set shiftwidth=4
-set softtabstop=4
 set showmatch
 set title
-set tm=500
-set tabstop=4
+set timeoutlen=500
 set termguicolors
 set undolevels=100
-
-"--------------------------------------
-"--------------------------------------
-"======================================
-"============ KeyBindings =============
-"======================================
-"--------------------------------------
-
-let mapleader=';'
-
-inoremap jk <Esc>
-
-nnoremap <Leader>q :q<CR>
-nnoremap <Leader>w :w<CR>
-
-nnoremap <F2> :NERDTreeToggle<CR>
-nnoremap <F3> :Autoformat<CR>
-nnoremap <F8> :TagbarToggle<CR>
-nnoremap <F4> :UndotreeToggle<cr>
-nnoremap <F5> :YcmDiags<CR>
-
-nnoremap <Left> <C-w><C-h>
-nnoremap <Right> <C-w><C-l>
-nnoremap <Up> <C-w><C-k>
-nnoremap <Down> <C-w><C-j>
-
-" Easymotion
-map <Space> <Plug>(easymotion-prefix)
-map <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
-map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
-map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
-map <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
-map . <Plug>(easymotion-repeat)
-
-"Autoformat
-nnoremap <C-k> :Autoformat<Cr>
-
-" 切换文件
-nnoremap <Leader><Tab> :bn<CR>
-nnoremap <Leader>c :bd<CR>
 
 "--------------------------------------
 "======================================
@@ -162,57 +125,86 @@ augroup IndentSetting
         \|setlocal softtabstop=2
 augroup END
 
-" autocmd vimenter * TagbarToggle
-" autocmd vimenter * NERDTree
+"--------------------------------------
+"--------------------------------------
+"======================================
+"============ KeyBindings =============
+"======================================
+"--------------------------------------
+
+let mapleader=';'
+
+inoremap jk <Esc>
+
+nnoremap <silent> <Leader>q :q<CR>
+nnoremap <silent> <Leader>w :w<CR>
+
+nnoremap <silent> <F2> :NERDTreeToggle<CR>
+nnoremap <silent> <F4> :UndotreeToggle<CR>
+nnoremap <silent> <F8> :TagbarToggle<CR>
+
+nnoremap <silent> <C-k> :Autoformat<CR>
+
+nnoremap <silent> <C-Tab> :bn<CR>
+nnoremap <silent> <C-c> :bd<CR>
+
+nnoremap <silent> <Leader>h :split<CR>
+nnoremap <silent> <Leader>v :vsplit<CR>
+
+nnoremap <M-h> <C-w><C-h>
+nnoremap <M-l> <C-w><C-l>
+nnoremap <M-k> <C-w><C-k>
+nnoremap <M-j> <C-w><C-j>
+
+map <Space> <Plug>(easymotion-prefix)
+map <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
+map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
+map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
+map <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
 
 "--------------------------------------
 "======================================
 "=============== Config ===============
 "======================================
 "--------------------------------------
+
+" <<deolete>>
 let g:deoplete#enable_at_startup = 1
 
-"<<easymotion>>
+" <<easymotion>>
 let g:EasyMotion_smartcase = 1
 
-"<<airline>>
+" <<airline>>
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'onedark'
 
-"<<multiple-cursor>>
+" <<multiple-cursor>>
 let g:multi_cursor_use_default_mapping=0
 
-let g:multi_cursor_start_key='<C-d>'
-let g:multi_cursor_next_key='<C-d>'
-let g:multi_cursor_prev_key='<C-p>'
-let g:multi_cursor_skip_key='<C-k>'
-let g:multi_cursor_quit_key='<Esc>'
+let g:multi_cursor_start_key = '<C-n>'
+let g:multi_cursor_next_key = '<C-n>'
+let g:multi_cursor_prev_key = '<C-p>'
+let g:multi_cursor_skip_key = '<C-s>'
+let g:multi_cursor_quit_key = '<Esc>'
 
-"<<nerdtree>>
+" <<nerdtree>>
 let g:NERDTreeWinSize = 30
 let g:NERDTreeQuitOnOpen = 1
 
-"<<tagbar>>
+" <<tagbar>>
 let g:tagbar_width = 70
 
-"<<gutter>>
+" <<gutter>>
 let g:gitgutter_map_keys = 0
 
-"<<indentLine>>
+" <<indentLin
 let g:indentLine_char = '¦'
 
-"<<ultisnips>>
+" <<ultisnips>>
 let g:UltiSnipsSnippetDirectories = ['ultisnips']
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/ultisnips'
-let g:UltiSnipsExpandTrigger = "<C-j>"
-let g:UltiSnipsJumpForwardTrigger = "<C-l>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-n>"
+let g:UltiSnipsExpandTrigger = "<Tab>"
+let g:UltiSnipsJumpForwardTrigger = "<C-k>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
 let g:UltiSnipsEditSplit = "vertical"
-
-
-"--------------------------------------
-"======================================
-"============ Functions ===============
-"======================================
-"--------------------------------------
