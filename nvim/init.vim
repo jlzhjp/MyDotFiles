@@ -22,7 +22,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'kshenoy/vim-signature'
 Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 Plug 'ryanoasis/vim-devicons'
 Plug 'majutsushi/tagbar', { 'on':  'TagbarToggle' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -30,6 +30,7 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 
+Plug 'w0rp/ale'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-clang'
@@ -39,12 +40,14 @@ Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 
 Plug 'morhetz/gruvbox'
-Plug 'lifepillar/vim-solarized8'
 Plug 'joshdick/onedark.vim'
+Plug 'tomasr/molokai'
+Plug 'icymind/NeoSolarized'
 
-Plug 'OrangeT/vim-csharp'
 Plug 'pangloss/vim-javascript'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 
 call plug#end()
 
@@ -90,6 +93,8 @@ set incsearch
 set lazyredraw
 set mouse=a
 set mousehide
+set magic
+set fileformat=unix
 set number
 set relativenumber
 set scrolloff=10
@@ -155,15 +160,18 @@ nnoremap <M-l> <C-w><C-l>
 nnoremap <M-k> <C-w><C-k>
 nnoremap <M-j> <C-w><C-j>
 
-map <Space> <Plug>(easymotion-prefix)
-map <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
-map <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
-map <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
-map <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
+nmap <Space> <Plug>(easymotion-prefix)
+nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
+nmap <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
+nmap <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
+nmap <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
 
 imap <C-j> <Plug>(neosnippet_expand_or_jump)
 smap <C-j> <Plug>(neosnippet_expand_or_jump)
 xmap <C-j> <Plug>(neosnippet_expand_target)
+
+nmap <Leader>pt <Plug>(vimpair-toggle)
+imap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Plug>(vimpair-tab)"
 
 "--------------------------------------
 "======================================
@@ -201,13 +209,33 @@ let g:tagbar_width = 70
 " <<gutter>>
 let g:gitgutter_map_keys = 0
 
-" <<indentLin
+" <<indentLine>>
 let g:indentLine_char = '¦'
 
-" <<ultisnips>>
-let g:UltiSnipsSnippetDirectories = ['ultisnips']
-let g:UltiSnipsSnippetsDir = '~/.config/nvim/ultisnips'
-let g:UltiSnipsExpandTrigger = "<Tab>"
-let g:UltiSnipsJumpForwardTrigger = "<C-k>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
-let g:UltiSnipsEditSplit = "vertical"
+let s:colors = {
+      \'onedark':{ 'scheme':'onedark', 'airline': 'onedark', },
+      \'molokai': { 'scheme':'molokai', 'airline': 'molokai', },
+      \'gruvbox': { 'scheme': 'gruvbox', 'airline': 'gruvbox', },
+      \'solarized': { 'scheme':'NeoSolarized', 'airline': 'solarized', },
+      \}
+
+"--------------------------------------
+"======================================
+"============= Functions ==============
+"=====================================
+"--------------------------------------
+function! ListColors(...)
+  return keys(s:colors)
+endfunction
+
+function! SwitchColors(name)
+  silent execute 'colorscheme '.s:colors[a:name]['scheme']
+  silent execute 'AirlineTheme '.s:colors[a:name]['airline']
+endfunction
+
+"--------------------------------------
+"======================================
+"============= Commands ===============
+"======================================
+"--------------------------------------
+command! -narg=1 -complete=customlist,ListColors SwitchColors :call SwitchColors(<f-args>)
