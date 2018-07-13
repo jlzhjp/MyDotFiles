@@ -124,9 +124,20 @@ augroup IndentSetting
     autocmd FileType javascript setlocal shiftwidth=2
                 \|setlocal tabstop=2
                 \|setlocal softtabstop=2
+    autocmd FileType html setlocal shiftwidth=2
+                \|setlocal tabstop=2
+                \|setlocal softtabstop=2
+    autocmd FileType css setlocal shiftwidth=2
+                \|setlocal tabstop=2
+                \|setlocal softtabstop=2
     autocmd FileType python setlocal shiftwidth=2
                 \|setlocal tabstop=2
                 \|setlocal softtabstop=2
+augroup END
+
+augroup FiletypeGroup
+  autocmd!
+  au BufNewFile,BufRead *.h set filetype=cpp
 augroup END
 
 "--------------------------------------
@@ -179,7 +190,7 @@ imap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Plug>(vimpair-tab)"
 "======================================
 "--------------------------------------
 
-" <<deolete>>
+" <<deoplete>>
 let g:deoplete#enable_at_startup = 1
 
 " <<easymotion>>
@@ -212,6 +223,13 @@ let g:gitgutter_map_keys = 0
 " <<indentLine>>
 let g:indentLine_char = '¦'
 
+" <<ALE>>
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_cpp_clang_options = '-std=c++1z -Wall -Wextra'
+let g:ale_cpp_gcc_options = '-std=c++1z -Wall -Wextra'
+let g:ale_linters = {'cpp': ['clang', 'gcc', ]}
+
 let s:colors = {
       \'onedark':{ 'scheme':'onedark', 'airline': 'onedark', },
       \'molokai': { 'scheme':'molokai', 'airline': 'molokai', },
@@ -222,13 +240,13 @@ let s:colors = {
 "--------------------------------------
 "======================================
 "============= Functions ==============
-"=====================================
+"======================================
 "--------------------------------------
 function! ListColors(...)
   return keys(s:colors)
 endfunction
 
-function! SwitchColors(name)
+function! SetColor(name)
   silent execute 'colorscheme '.s:colors[a:name]['scheme']
   silent execute 'AirlineTheme '.s:colors[a:name]['airline']
 endfunction
@@ -238,4 +256,12 @@ endfunction
 "============= Commands ===============
 "======================================
 "--------------------------------------
-command! -narg=1 -complete=customlist,ListColors SwitchColors :call SwitchColors(<f-args>)
+command! -narg=1 -complete=customlist,ListColors SetColor :call SetColor(<f-args>)
+
+"--------------------------------------
+"======================================
+"============= Highlight ==============
+"======================================
+"--------------------------------------
+
+highlight Normal guibg=NONE ctermbg=NONE
