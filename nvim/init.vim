@@ -1,9 +1,12 @@
+set encoding=UTF-8
+scriptencoding UTF-8
+
 "--------------------------------------
 "======================================
 "============= Plugins ================
 "======================================
 "--------------------------------------
-call plug#begin("~/.config/nvim/plugged")
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'tpope/vim-sensible'
 
@@ -35,6 +38,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-clang'
 Plug 'carlitux/deoplete-ternjs'
+Plug 'zchee/deoplete-jedi'
 
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
@@ -75,7 +79,6 @@ set backupdir=~/.config/nvim/backup
 set colorcolumn=80
 set cursorline
 set copyindent
-set encoding=UTF-8
 set expandtab
 set shiftwidth=4
 set softtabstop=4
@@ -111,10 +114,11 @@ set undolevels=100
 "=========== AutoCommands =============
 "======================================
 "--------------------------------------
-augroup PreviewOnBottom
-    autocmd InsertEnter * set splitbelow
-    autocmd InsertLeave * set splitbelow!
-augroup END
+
+" augroup PreviewOnBottom
+"     autocmd InsertEnter * set splitbelow
+"     autocmd InsertLeave * set splitbelow!
+" augroup END
 
 augroup IndentSetting
     autocmd!
@@ -130,14 +134,15 @@ augroup IndentSetting
     autocmd FileType css setlocal shiftwidth=2
                 \|setlocal tabstop=2
                 \|setlocal softtabstop=2
-    autocmd FileType python setlocal shiftwidth=2
-                \|setlocal tabstop=2
-                \|setlocal softtabstop=2
 augroup END
 
 augroup FiletypeGroup
   autocmd!
-  au BufNewFile,BufRead *.h set filetype=cpp
+  autocmd BufNewFile,BufRead *.h set filetype=cpp
+augroup END
+augroup CleanUp
+  autocmd!
+  autocmd VimLeavePre * execute '!rm ./*.pch && rm ./*.tmp && rm ./*.tu'
 augroup END
 
 "--------------------------------------
@@ -147,7 +152,7 @@ augroup END
 "======================================
 "--------------------------------------
 
-let mapleader=';'
+let g:mapleader=';'
 
 inoremap jk <Esc>
 
@@ -224,11 +229,9 @@ let g:gitgutter_map_keys = 0
 let g:indentLine_char = '¦'
 
 " <<ALE>>
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
 let g:ale_cpp_clang_options = '-std=c++1z -Wall -Wextra'
 let g:ale_cpp_gcc_options = '-std=c++1z -Wall -Wextra'
-let g:ale_linters = {'cpp': ['clang', 'gcc', ]}
+let g:ale_linters = {'cpp': ['clang',]}
 
 let s:colors = {
       \'onedark':{ 'scheme':'onedark', 'airline': 'onedark', },
