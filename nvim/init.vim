@@ -19,6 +19,13 @@ nmap <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
 nmap <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
 let g:EasyMotion_smartcase = 1
 
+Plug 'haya14busa/incsearch.vim'
+Plug 'terryma/vim-smooth-scroll'
+noremap <silent> <C-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
+noremap <silent> <C-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 10, 4)<CR>
+noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 10, 4)<CR>
+
 Plug 'terryma/vim-multiple-cursors'
 let g:multi_cursor_use_default_mapping=0
 let g:multi_cursor_start_key = '<C-n>'
@@ -188,7 +195,7 @@ let s:colors = {
       \}
 
 function! ListColors(arg_lead, ...)
-  return filter(keys(s:colors), 'v:val =~ a:arg_lead')
+  return filter(keys(s:colors), { val -> val =~ a:arg_lead })
 endfunction
 
 function! SetColor(name)
