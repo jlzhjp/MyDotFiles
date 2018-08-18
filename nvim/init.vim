@@ -1,6 +1,8 @@
 set encoding=UTF-8
 scriptencoding UTF-8
 
+let g:mapleader=';'
+
 "--------------------------------------
 "======================================
 "============= Plugins ================
@@ -27,18 +29,13 @@ noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 10, 4)<CR>
 noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 10, 4)<CR>
 
 Plug 'terryma/vim-multiple-cursors'
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_key = '<C-n>'
-let g:multi_cursor_next_key = '<C-n>'
-let g:multi_cursor_prev_key = '<C-p>'
-let g:multi_cursor_skip_key = '<C-s>'
-let g:multi_cursor_quit_key = '<Esc>'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
-Plug 'jlzhjp/vim-pair'
-nmap <Leader>pt <Plug>(vimpair-toggle)
+Plug 'jlzhjp/vim-pair', { 'branch': 'dev' }
+let g:pair_toggle_key = "<Leader>pt"
+let g:pair_fly_key = "jl"
 
 Plug 'Chiel92/vim-autoformat'
 nnoremap <silent> <Leader>f :Autoformat<CR>
@@ -64,7 +61,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 Plug 'ryanoasis/vim-devicons'
 Plug 'majutsushi/tagbar', { 'on':  'TagbarToggle' }
 nnoremap <silent> <F8> :TagbarToggle<CR>
-let g:tagbar_width = 70
+let g:tagbar_width = 60
 
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 nnoremap <silent> <F4> :UndotreeToggle<CR>
@@ -73,39 +70,44 @@ Plug 'airblade/vim-gitgutter'
 let g:gitgutter_map_keys = 0
 Plug 'ctrlpvim/ctrlp.vim'
 
-Plug 'Valloric/YouCompleteMe'
-nnoremap <silent> <F5> :YcmDiags<CR>
-nnoremap <silent> <Leader>fi :YcmCompleter FixIt<CR>
-let g:ycm_warning_symbol = '--'
-let g:ycm_global_ycm_extra_conf = '~/.config/nvim/ycm_extra_conf.py'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+
+Plug 'w0rp/ale'
+
+Plug 'Shougo/neco-syntax'
+Plug 'Shougo/neco-vim'
+Plug 'zchee/deoplete-clang'
+Plug 'callmekohei/deoplete-fsharp', { 'do': 'bash install.bash' }
+Plug 'carlitux/deoplete-ternjs'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-b>"
-let g:UltiSnipsJumpBackwardTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-a>"
+let g:UltiSnipsJumpBackwardTrigger="<C-s>"
 let g:UltiSnipsEditSplit="vertical"
 
 Plug 'honza/vim-snippets'
 
 Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
+Plug 'rakr/vim-one'
 Plug 'tomasr/molokai'
-Plug 'icymind/NeoSolarized'
+Plug 'arcticicestudio/nord-vim'
+Plug 'tyrannicaltoucan/vim-deep-space'
 
 Plug 'pangloss/vim-javascript'
 Plug 'bfrg/vim-cpp-modern'
-Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
 call plug#end()
 
 syntax on
 syntax enable
-colorscheme onedark
+colorscheme one
 
 filetype on
-filetype indent on
 filetype plugin on
+filetype indent on
 filetype plugin indent on
 
 set autoindent
@@ -140,34 +142,36 @@ set relativenumber
 set scrolloff=10
 set smartcase
 set showmatch
-set showmatch
 set title
 set timeoutlen=500
 set termguicolors
 set undolevels=100
 
 augroup PreviewOnBottom
-    autocmd InsertEnter * set splitbelow
-    autocmd InsertLeave * set splitbelow!
-augroup END
+  autocmd!
+  autocmd InsertEnter * set splitbelow
+  autocmd InsertLeave * set splitbelow!
+augroup end
 
 augroup IndentSetting
   autocmd!
-  autocmd FileType vim setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-  autocmd FileType javascript setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-  autocmd FileType html setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-  autocmd FileType css setlocal shiftwidth=2
-        \|setlocal tabstop=2
-        \|setlocal softtabstop=2
-augroup END
-
-let g:mapleader=';'
+  autocmd FileType vim
+        \  setlocal shiftwidth=2
+        \| setlocal tabstop=2
+        \| setlocal softtabstop=2
+  autocmd FileType javascript
+        \  setlocal shiftwidth=2
+        \| setlocal tabstop=2
+        \| setlocal softtabstop=2
+  autocmd FileType html
+        \  setlocal shiftwidth=2
+        \| setlocal tabstop=2
+        \| setlocal softtabstop=2
+  autocmd FileType css
+        \  setlocal shiftwidth=2
+        \| setlocal tabstop=2
+        \| setlocal softtabstop=2
+augroup end
 
 inoremap jk <Esc>
 
@@ -185,25 +189,4 @@ nnoremap <M-l> <C-w><C-l>
 nnoremap <M-k> <C-w><C-k>
 nnoremap <M-j> <C-w><C-j>
 
-imap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Plug>(vimpair-tab)"
-
-let s:colors = {
-      \'onedark':{ 'scheme':'onedark', 'airline': 'onedark', },
-      \'molokai': { 'scheme':'molokai', 'airline': 'molokai', },
-      \'gruvbox': { 'scheme': 'gruvbox', 'airline': 'gruvbox', },
-      \'solarized': { 'scheme':'NeoSolarized', 'airline': 'solarized', },
-      \}
-
-function! ListColors(arg_lead, ...)
-  return filter(keys(s:colors), { val -> val =~ a:arg_lead })
-endfunction
-
-function! SetColor(name)
-  silent execute 'colorscheme '.s:colors[a:name]['scheme']
-  silent execute 'AirlineTheme '.s:colors[a:name]['airline']
-endfunction
-
-command! -narg=1 -complete=customlist,ListColors SetColor :call SetColor(<f-args>)
-
-"背景透明
 "highlight Normal guibg=NONE ctermbg=NONE
