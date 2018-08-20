@@ -43,7 +43,7 @@ nnoremap <silent> <Leader>f :Autoformat<CR>
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'onedark'
+let g:airline_theme = 'base16'
 
 Plug 'vim-airline/vim-airline-themes'
 
@@ -74,12 +74,21 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 
 Plug 'w0rp/ale'
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_cpp_clang_options = '-std=c++1z -Wall -Wextra'
+let g:ale_cpp_gcc_options = '-std=c++1z -Wall -Wextra'
+let g:ale_cpp_clangcheck_options = '-std=c++1z -Wall -Wextra'
 
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neco-vim'
 Plug 'zchee/deoplete-clang'
 Plug 'callmekohei/deoplete-fsharp', { 'do': 'bash install.bash' }
 Plug 'carlitux/deoplete-ternjs'
+Plug 'zchee/deoplete-jedi'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<C-j>"
@@ -91,9 +100,9 @@ Plug 'honza/vim-snippets'
 
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
-Plug 'tomasr/molokai'
+Plug 'HenryNewcomer/vim-theme-papaya'
+Plug 'junegunn/seoul256.vim'
 Plug 'arcticicestudio/nord-vim'
-Plug 'tyrannicaltoucan/vim-deep-space'
 
 Plug 'pangloss/vim-javascript'
 Plug 'bfrg/vim-cpp-modern'
@@ -118,6 +127,7 @@ set background=dark
 set backup
 set backupdir=~/.config/nvim/backup
 set colorcolumn=80
+set completeopt=longest,menuone,preview
 set cursorline
 set copyindent
 set expandtab
@@ -125,9 +135,6 @@ set shiftwidth=4
 set softtabstop=4
 set tabstop=4
 set foldenable
-set guifont=Source\ Code\ Pro\ 11
-set guioptions-=m
-set guioptions-=T
 set hidden
 set history=100
 set hlsearch
@@ -178,7 +185,7 @@ inoremap jk <Esc>
 nnoremap <silent> <Leader>q :q<CR>
 nnoremap <silent> <Leader>w :w<CR>
 
-nnoremap <S-Tab> :bn<CR>
+nnoremap <silent> <S-Tab> :bn<CR>
 nnoremap <silent> <C-c> :bd<CR>
 
 nnoremap <silent> <Leader>h :split<CR>
@@ -189,4 +196,4 @@ nnoremap <M-l> <C-w><C-l>
 nnoremap <M-k> <C-w><C-k>
 nnoremap <M-j> <C-w><C-j>
 
-"highlight Normal guibg=NONE ctermbg=NONE
+" highlight Normal guibg=NONE ctermbg=NONE
