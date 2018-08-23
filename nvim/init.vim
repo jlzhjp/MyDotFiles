@@ -13,6 +13,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'tpope/vim-sensible'
 
 Plug 'justinmk/vim-sneak'
+Plug 'machakann/vim-swap'
 Plug 'Lokaltog/vim-easymotion'
 nmap <Space> <Plug>(easymotion-prefix)
 nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
@@ -34,8 +35,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
 Plug 'jlzhjp/vim-pair', { 'branch': 'dev' }
-let g:pair_toggle_key = "<Leader>pt"
-let g:pair_fly_key = "jl"
+let g:pair_toggle_key = '<Leader>pt'
+let g:pair_fly_key = '<Tab>'
+let g:pair_enable_fly_key_mapping = v:false
 
 Plug 'Chiel92/vim-autoformat'
 nnoremap <silent> <Leader>f :Autoformat<CR>
@@ -74,8 +76,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 
 Plug 'w0rp/ale'
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '--'
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
@@ -91,9 +93,9 @@ Plug 'carlitux/deoplete-ternjs'
 Plug 'zchee/deoplete-jedi'
 
 Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-a>"
-let g:UltiSnipsJumpBackwardTrigger="<C-s>"
+let g:UltiSnipsExpandTrigger="<M-j>"
+let g:UltiSnipsJumpForwardTrigger="<M-h>"
+let g:UltiSnipsJumpBackwardTrigger="<C-l>"
 let g:UltiSnipsEditSplit="vertical"
 
 Plug 'honza/vim-snippets'
@@ -105,6 +107,7 @@ Plug 'junegunn/seoul256.vim'
 Plug 'arcticicestudio/nord-vim'
 
 Plug 'pangloss/vim-javascript'
+Plug 'vim-scripts/csharp.vim'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'plasticboy/vim-markdown'
 
@@ -112,7 +115,7 @@ call plug#end()
 
 syntax on
 syntax enable
-colorscheme one
+colorscheme seoul256
 
 filetype on
 filetype plugin on
@@ -127,7 +130,7 @@ set background=dark
 set backup
 set backupdir=~/.config/nvim/backup
 set colorcolumn=80
-set completeopt=longest,menuone,preview
+set completeopt=longest,menuone,noinsert,preview
 set cursorline
 set copyindent
 set expandtab
@@ -182,6 +185,8 @@ augroup end
 
 inoremap jk <Esc>
 
+inoremap <expr> <silent> <Tab> pumvisible() ? "\<C-y>" : b:pair_controller.Fly()
+
 nnoremap <silent> <Leader>q :q<CR>
 nnoremap <silent> <Leader>w :w<CR>
 
@@ -191,9 +196,10 @@ nnoremap <silent> <C-c> :bd<CR>
 nnoremap <silent> <Leader>h :split<CR>
 nnoremap <silent> <Leader>v :vsplit<CR>
 
-nnoremap <M-h> <C-w><C-h>
-nnoremap <M-l> <C-w><C-l>
-nnoremap <M-k> <C-w><C-k>
-nnoremap <M-j> <C-w><C-j>
+nnoremap <M-H> <C-w><C-h>
+nnoremap <M-L> <C-w><C-l>
+nnoremap <M-K> <C-w><C-k>
+nnoremap <M-J> <C-w><C-j>
+nnoremap <M-=> <C-w><C-=>
 
 " highlight Normal guibg=NONE ctermbg=NONE
