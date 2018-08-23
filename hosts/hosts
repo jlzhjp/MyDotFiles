@@ -16,11 +16,13 @@
 52.84.246.90    d3c33hcgiwev3.cloudfront.net
 52.84.246.227   d3c33hcgiwev3.cloudfront.net
 
-192.30.253.112 	github.com
-192.30.253.118	gist.github.com
-192.30.253.116  api.github.com
-103.245.222.133 assets-cdn.github.com
-151.101.184.133 github.map.fastly.net
-151.101.185.194 github.global.ssl.fastly.net
+# Github
+192.30.255.112 	github.com
+192.30.255.97	uploads.github.com
+192.30.255.119	gist.github.com
+192.30.255.116  api.github.com
+151.101.40.133	assets-cdn.github.com
+151.101.40.133	github.map.fastly.net
+151.101.41.194	github.global.ssl.fastly.net
 
 # End of file
