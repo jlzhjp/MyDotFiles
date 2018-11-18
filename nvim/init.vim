@@ -36,8 +36,7 @@ Plug 'tpope/vim-repeat'
 
 Plug 'jlzhjp/vim-pair', { 'branch': 'dev' }
 let g:pair_toggle_key = '<Leader>pt'
-let g:pair_fly_key = '<Tab>'
-let g:pair_enable_fly_key_mapping = v:false
+let g:pair_fly_key = 'jl'
 
 Plug 'Chiel92/vim-autoformat'
 nnoremap <silent> <Leader>f :Autoformat<CR>
@@ -72,25 +71,7 @@ Plug 'airblade/vim-gitgutter'
 let g:gitgutter_map_keys = 0
 Plug 'ctrlpvim/ctrlp.vim'
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-
-Plug 'w0rp/ale'
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_cpp_clang_options = '-std=c++1z -Wall -Wextra'
-let g:ale_cpp_gcc_options = '-std=c++1z -Wall -Wextra'
-let g:ale_cpp_clangcheck_options = '-std=c++1z -Wall -Wextra'
-
-Plug 'Shougo/neco-syntax'
-Plug 'Shougo/neco-vim'
-Plug 'zchee/deoplete-clang'
-Plug 'callmekohei/deoplete-fsharp', { 'do': 'bash install.bash' }
-Plug 'carlitux/deoplete-ternjs'
-Plug 'zchee/deoplete-jedi'
+Plug 'Valloric/YouCompleteMe'
 
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<M-j>"
@@ -102,12 +83,10 @@ Plug 'honza/vim-snippets'
 
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
-Plug 'HenryNewcomer/vim-theme-papaya'
 Plug 'junegunn/seoul256.vim'
 Plug 'arcticicestudio/nord-vim'
 
 Plug 'pangloss/vim-javascript'
-Plug 'vim-scripts/csharp.vim'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'plasticboy/vim-markdown'
 
@@ -115,7 +94,7 @@ call plug#end()
 
 syntax on
 syntax enable
-colorscheme seoul256
+colorscheme one
 
 filetype on
 filetype plugin on
@@ -184,8 +163,6 @@ augroup IndentSetting
 augroup end
 
 inoremap jk <Esc>
-
-inoremap <expr> <silent> <Tab> pumvisible() ? "\<C-y>" : b:pair_controller.Fly()
 
 nnoremap <silent> <Leader>q :q<CR>
 nnoremap <silent> <Leader>w :w<CR>
