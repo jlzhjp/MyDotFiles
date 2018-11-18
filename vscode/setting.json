@@ -1,0 +1,35 @@
+{
+    "window.titleBarStyle": "custom",
+    "workbench.colorTheme": "One Dark Pro",
+    "editor.fontFamily": "'Source Code Pro', '微软雅黑',  '微软雅黑'",
+    "explorer.confirmDragAndDrop": false,
+    "editor.fontSize": 14,
+    "vim.easymotion": true,
+    "vim.sneak": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.leader": ";",
+    "vim.easymotionMarkerFontFamily": "Source Code Pro",
+    "vim.easymotionMarkerFontWeight": "bold",
+    "vim.easymotionMarkerFontSize": "14",
+    "vim.easymotionMarkerYOffset": 5,
+    "vim.easymotionMarkerForegroundColorOneChar": "#f44336",
+    "vim.easymotionMarkerForegroundColorTwoChar": "#fdd835",
+    "vim.easymotionMarkerBackgroundColor": "#282c34",
+    "vim.normalModeKeyBindings": [
+        { "before": ["<Space>", "w"], "after": ["<Leader>", "<Leader>", "w"] },
+        { "before": ["<Space>", "b"], "after": ["<Leader>", "<Leader>", "b"] },
+        { "before": ["<Space>", "s"], "after": ["<Leader>", "<Leader>", "s"] },
+        { "before": ["<Space>", "k"], "after": ["<Leader>", "<Leader>", "k"] },
+        { "before": ["<Space>", "j"], "after": ["<Leader>", "<Leader>", "j"] },
+    ],
+    "vim.insertModeKeyBindingsNonRecursive": [
+        { "before": ["j", "k"], "after": ["<Esc>"] },
+    ],
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false
+    },
+}
