@@ -13,6 +13,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-swap'
 Plug 'Lokaltog/vim-easymotion'
 let g:EasyMotion_smartcase = 1
+Plug 'vim-scripts/a.vim'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'terryma/vim-smooth-scroll'
@@ -33,11 +34,11 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '¦'
 Plug 'kshenoy/vim-signature'
+Plug 'scrooloose/nerdcommenter'
+let g:NERDSpaceDelims = 1
 
 Plug 'mhinz/vim-startify'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-let g:NERDTreeWinSize = 30
-let g:NERDTreeQuitOnOpen = 1
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 Plug 'ryanoasis/vim-devicons'
 Plug 'majutsushi/tagbar', { 'on':  'TagbarToggle' }
@@ -45,7 +46,7 @@ let g:tagbar_width = 60
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_map_keys = 0
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf.vim'
 
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
@@ -92,14 +93,17 @@ set autowriteall
 set background=dark
 set backup
 set backupdir=~/.config/nvim/backup
+set cinoptions=N-s,g0,hs,l1,t0,i4,+4,(0,w1,W4,L0
 set colorcolumn=80
 set completeopt=longest,menuone,noinsert,preview
-set cursorline
 set copyindent
+set cursorline
 set expandtab
 set shiftwidth=4
 set splitbelow
 set softtabstop=4
+set smartindent
+set smarttab
 set tabstop=4
 set foldenable
 set fileformat=unix
@@ -121,6 +125,10 @@ set title
 set timeoutlen=500
 set termguicolors
 set undolevels=100
+set whichwrap=b,>,<,],[
+set wildmenu
+set wildmode=longest:full,full
+set wrap
 
 function! Tab()
   if pumvisible()
@@ -133,6 +141,20 @@ endfunction
 function! ClosePreview()
   if !pumvisible()
     pclose
+  endif
+endfunction
+
+function! ToggleBackground()
+  if exists('s:_background_transparent') && s:_background_transparent
+    try
+      execute 'colorscheme '.g:colors_name
+    catch
+      execute 'colorscheme default'
+    endtry
+    let s:_background_transparent = v:false
+  else
+    highlight Normal guibg=NONE ctermbg=NONE
+    let s:_background_transparent = v:true
   endif
 endfunction
 
@@ -152,8 +174,10 @@ endfunction()
 inoremap jk <Esc>
 
 noremap <C-S> :w<CR>
+noremap <C-K> :q<CR>
 
-nnoremap <silent> <S-Tab> :bn<CR>
+nnoremap <silent> <Tab> :bn<CR>
+nnoremap <silent> <S-Tab> :bp<CR>
 nnoremap <silent> <C-C> :bd<CR>
 
 inoremap <expr> <Tab> Tab()
@@ -161,7 +185,10 @@ inoremap <expr> <Tab> Tab()
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 nnoremap <silent> <F3> :Autoformat<CR>
 nnoremap <silent> <F4> :UndotreeToggle<CR>
+nnoremap <silent> <F5> :call ToggleBackground()<CR>
 nnoremap <silent> <F8> :TagbarToggle<CR>
+
+nnoremap <C-P> :FZF<CR>
 
 nmap <Space> <Plug>(easymotion-prefix)
 nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
@@ -174,16 +201,20 @@ noremap <silent> <C-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
 noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 10, 4)<CR>
 noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 10, 4)<CR>
 
-
-autocmd InsertLeave,CompleteDone * call ClosePreview()
+augroup Preview
+  autocmd!
+  autocmd CompleteDone,InsertLeave * call ClosePreview()
+augroup END
 
 augroup LSP
   autocmd!
-  autocmd FileType cpp,c call SetLSPShortcuts()
+  autocmd FileType c,cpp,python call SetLSPShortcuts()
 augroup END
 
+augroup FileTypes
+  autocmd!
+  autocmd FileType c,cpp,cs inoremap ; <End>;
+  autocmd FileType c,cpp noremap <silent>  <C-J> :A<CR>
+augroup END
 
-" 背景透明
-" highlight Normal guibg=NONE ctermbg=NONE
-"
-" vim: foldmethod=marker: tabstop=2: softtabstop=2: shiftwidth=2: expandtab
+" vim: foldmethod=marker: tabstop=8: softtabstop=2: shiftwidth=2: expandtab
