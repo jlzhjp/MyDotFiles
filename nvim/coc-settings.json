@@ -1,0 +1,14 @@
+{
+  "suggest.noselect": false,
+  "suggest.snippetIndicator": "►",
+  "languageserver": {
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    }
+  }
+}
+
+// vim: tabstop=8: softtabstop=2: shiftwidth=2: expandtab

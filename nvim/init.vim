@@ -1,6 +1,14 @@
 set encoding=UTF-8
 scriptencoding UTF-8
 
+syntax on
+syntax enable
+
+filetype on
+filetype plugin on
+filetype indent on
+filetype plugin indent on
+
 let g:mapleader=';'
 
 silent !mkdir ~/.config/nvim/backup > /dev/null 2>&1
@@ -13,12 +21,10 @@ Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-swap'
 Plug 'Lokaltog/vim-easymotion'
 let g:EasyMotion_smartcase = 1
-Plug 'vim-scripts/a.vim'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'jlzhjp/vim-pair', { 'branch': 'dev' }
@@ -32,7 +38,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'base16'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
-let g:indentLine_char = '¦'
+let g:indentLine_char = '┊'
 Plug 'kshenoy/vim-signature'
 Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
@@ -58,33 +64,20 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'Chiel92/vim-autoformat'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
-            \ }
-let g:LanguageClient_serverCommands = {
-  \ 'cpp': ['clangd'],
-  \ 'python': ['pyls'],
-  \ }
+
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger = '<NUL>'
+let g:UltiSnipsJumpForwardTrigger = '<C-J>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-K>'
+
+Plug 'Shougo/neco-vim'
+Plug 'neoclide/coc-neco'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
-call deoplete#custom#source('LanguageClient',
-            \ 'min_pattern_length', 2)
-call deoplete#custom#source('_',
-            \ 'disabled_syntaxes', ['String', 'Comment'])
-
-syntax on
-syntax enable
 colorscheme one
-
-filetype on
-filetype plugin on
-filetype indent on
-filetype plugin indent on
 
 set autoindent
 set autoread
@@ -95,16 +88,10 @@ set backup
 set backupdir=~/.config/nvim/backup
 set cinoptions=N-s,g0,hs,l1,t0,i4,+4,(0,w1,W4,L0
 set colorcolumn=80
-set completeopt=longest,menuone,noinsert,preview
+set completeopt=menuone,noinsert,preview
 set copyindent
 set cursorline
 set expandtab
-set shiftwidth=4
-set splitbelow
-set softtabstop=4
-set smartindent
-set smarttab
-set tabstop=4
 set foldenable
 set fileformat=unix
 set hidden
@@ -115,12 +102,18 @@ set lazyredraw
 set mouse=a
 set mousehide
 set magic
-set shortmess+=c
 set number
 set relativenumber
 set scrolloff=10
-set smartcase
+set shortmess+=c
 set showmatch
+set smartcase
+set splitbelow
+set shiftwidth=4
+set softtabstop=4
+set smartindent
+set smarttab
+set tabstop=8
 set title
 set timeoutlen=500
 set termguicolors
@@ -130,9 +123,9 @@ set wildmenu
 set wildmode=longest:full,full
 set wrap
 
-function! Tab()
+function! s:Tab()
   if pumvisible()
-    return "\<C-Y>"
+    return g:coc#_select_confirm()
   else
     return b:pair_controller.Fly()
   endif
@@ -144,7 +137,7 @@ function! ClosePreview()
   endif
 endfunction
 
-function! ToggleBackground()
+function! s:ToggleBackground()
   if exists('s:_background_transparent') && s:_background_transparent
     try
       execute 'colorscheme '.g:colors_name
@@ -158,63 +151,72 @@ function! ToggleBackground()
   endif
 endfunction
 
-function! SetLSPShortcuts()
-  nnoremap gd :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
-  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
-  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
-  nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
-  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
-  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
-endfunction()
+function! s:SelectCurrentWord()
+  if !get(g:, 'coc_cursors_activated', 0)
+    return "\<Plug>(coc-cursors-word)"
+  endif
+  return "*\<Plug>(coc-cursors-word):nohlsearch\<CR>"
+endfunc
 
 inoremap jk <Esc>
+inoremap kj <Esc>
 
 noremap <C-S> :w<CR>
 noremap <C-K> :q<CR>
 
 nnoremap <silent> <Tab> :bn<CR>
 nnoremap <silent> <S-Tab> :bp<CR>
-nnoremap <silent> <C-C> :bd<CR>
+nnoremap <silent> <C-C> :bp\|bd #<CR>
 
-inoremap <expr> <Tab> Tab()
+inoremap <silent> <expr> <Tab> <SID>Tab()
 
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
 nnoremap <silent> <F3> :Autoformat<CR>
 nnoremap <silent> <F4> :UndotreeToggle<CR>
-nnoremap <silent> <F5> :call ToggleBackground()<CR>
+nnoremap <silent> <F5> :call <SID>ToggleBackground()<CR>
 nnoremap <silent> <F8> :TagbarToggle<CR>
+
+nnoremap <Left> <C-W><C-H>
+nnoremap <Up> <C-W><C-K>
+nnoremap <Right> <C-W><C-L>
+nnoremap <Down> <C-W><C-J>
 
 nnoremap <C-P> :FZF<CR>
 
+nmap <silent> <expr> <M-d> <SID>SelectCurrentWord()
+xmap <silent> <M-d> <Plug>(coc-cursors-range)
+
+inoremap <silent><expr> <C-Space> coc#refresh()
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> <Leader>rn <Plug>(coc-rename)
+
 nmap <Space> <Plug>(easymotion-prefix)
-nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
 nmap <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
 nmap <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
+nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
 nmap <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
 
-noremap <silent> <C-u> :call smooth_scroll#up(&scroll, 10, 2)<CR>
-noremap <silent> <C-d> :call smooth_scroll#down(&scroll, 10, 2)<CR>
-noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 10, 4)<CR>
-noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 10, 4)<CR>
+noremap <silent> <C-U> :call smooth_scroll#up(&scroll, 10, 2)<CR>
+noremap <silent> <C-D> :call smooth_scroll#down(&scroll, 10, 2)<CR>
+noremap <silent> <C-B> :call smooth_scroll#up(&scroll*2, 10, 4)<CR>
+noremap <silent> <C-F> :call smooth_scroll#down(&scroll*2, 10, 4)<CR>
 
 augroup Preview
   autocmd!
   autocmd CompleteDone,InsertLeave * call ClosePreview()
 augroup END
 
-augroup LSP
-  autocmd!
-  autocmd FileType c,cpp,python call SetLSPShortcuts()
-augroup END
-
 augroup FileTypes
   autocmd!
-  autocmd FileType c,cpp,cs inoremap ; <End>;
-  autocmd FileType c,cpp noremap <silent>  <C-J> :A<CR>
+  " autocmd FileType c,cpp,cs inoremap ; <End>;
+  autocmd FileType json syntax match Comment +\/\/.\+$+
 augroup END
+
+call s:ToggleBackground()
 
 " vim: foldmethod=marker: tabstop=8: softtabstop=2: shiftwidth=2: expandtab
