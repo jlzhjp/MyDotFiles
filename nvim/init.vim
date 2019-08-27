@@ -39,6 +39,8 @@ let g:airline_theme = 'base16'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '┊'
+let g:indentLine_conceallevel = 2
+let g:indentLine_concealcursor = ""
 Plug 'kshenoy/vim-signature'
 Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
@@ -60,8 +62,11 @@ Plug 'rakr/vim-one'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
 Plug 'plasticboy/vim-markdown'
-Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+Plug 'arakashic/chromatica.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:chromatica#enable_at_startup = 1
+let g:chromatica#libclang_path = '/usr/lib64/libclang.so'
+let g:chromatica#responsive_mode = 1
 
 Plug 'Chiel92/vim-autoformat'
 
