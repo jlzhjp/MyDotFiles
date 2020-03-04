@@ -11,31 +11,29 @@ filetype plugin indent on
 
 let g:mapleader=';'
 
-silent !mkdir ~/.config/nvim/backup > /dev/null 2>&1
-
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'tpope/vim-sensible'
 
-Plug 'justinmk/vim-sneak'
-Plug 'machakann/vim-swap'
 Plug 'Lokaltog/vim-easymotion'
 let g:EasyMotion_smartcase = 1
 
 Plug 'haya14busa/incsearch.vim'
+let g:incsearch#auto_nohlsearch = 1
 Plug 'terryma/vim-smooth-scroll'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'jlzhjp/vim-pair', { 'branch': 'dev' }
+Plug 'jlzhjp/vim-pair'
 let g:pair_toggle_key = '<Leader>pt'
 let g:pair_fly_key = '<Tab>'
 let g:pair_enable_fly_key_mapping = v:false
 
+Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
-let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'base16'
+let g:airline_powerline_fonts = 1
 Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '┊'
@@ -46,35 +44,20 @@ Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
 
 Plug 'mhinz/vim-startify'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
-Plug 'ryanoasis/vim-devicons'
-Plug 'majutsushi/tagbar', { 'on':  'TagbarToggle' }
+Plug 'scrooloose/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'majutsushi/tagbar'
 let g:tagbar_width = 60
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-Plug 'airblade/vim-gitgutter'
-let g:gitgutter_map_keys = 0
-Plug 'junegunn/fzf.vim'
+Plug 'mbbill/undotree'
 
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
 
 Plug 'sheerun/vim-polyglot'
-Plug 'pangloss/vim-javascript'
-Plug 'plasticboy/vim-markdown'
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
-Plug 'arakashic/chromatica.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:chromatica#enable_at_startup = 1
-let g:chromatica#libclang_path = '/usr/lib64/libclang.so'
-let g:chromatica#responsive_mode = 1
 
-Plug 'Chiel92/vim-autoformat'
 
 Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger = '<NUL>'
-let g:UltiSnipsJumpForwardTrigger = '<C-J>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-K>'
 
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
@@ -82,7 +65,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
-colorscheme one
+colorscheme gruvbox
 
 set autoindent
 set autoread
@@ -128,14 +111,6 @@ set wildmenu
 set wildmode=longest:full,full
 set wrap
 
-function! s:Tab()
-  if pumvisible()
-    return g:coc#_select_confirm()
-  else
-    return b:pair_controller.Fly()
-  endif
-endfunction
-
 function! ClosePreview()
   if !pumvisible()
     pclose
@@ -156,7 +131,15 @@ function! s:ToggleBackground()
   endif
 endfunction
 
-function! s:SelectCurrentWord()
+function! s:Tab() abort
+  if pumvisible()
+    return "\<C-Y>"
+  else
+    return g:PairFly()
+  endif
+endfunction
+
+function! s:SelectCurrentWord() abort
   if !get(g:, 'coc_cursors_activated', 0)
     return "\<Plug>(coc-cursors-word)"
   endif
@@ -164,19 +147,14 @@ function! s:SelectCurrentWord()
 endfunc
 
 inoremap jk <Esc>
-inoremap kj <Esc>
-
 noremap <C-S> :w<CR>
-noremap <C-K> :q<CR>
+imap <silent> <expr> <Tab> <SID>Tab()
 
 nnoremap <silent> <Tab> :bn<CR>
 nnoremap <silent> <S-Tab> :bp<CR>
 nnoremap <silent> <C-C> :bp\|bd #<CR>
 
-inoremap <silent> <expr> <Tab> <SID>Tab()
-
 nnoremap <silent> <F2> :NERDTreeToggle<CR>
-nnoremap <silent> <F3> :Autoformat<CR>
 nnoremap <silent> <F4> :UndotreeToggle<CR>
 nnoremap <silent> <F5> :call <SID>ToggleBackground()<CR>
 nnoremap <silent> <F8> :TagbarToggle<CR>
@@ -186,12 +164,14 @@ nnoremap <Up> <C-W><C-K>
 nnoremap <Right> <C-W><C-L>
 nnoremap <Down> <C-W><C-J>
 
-nnoremap <C-P> :FZF<CR>
+nnoremap <C-P> :CocList files<CR>
 
-nmap <silent> <expr> <M-d> <SID>SelectCurrentWord()
-xmap <silent> <M-d> <Plug>(coc-cursors-range)
+nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
 
-inoremap <silent><expr> <C-Space> coc#refresh()
+nmap <silent> <expr> <C-N> <SID>SelectCurrentWord()
+xmap <silent> <C-N> <Plug>(coc-cursors-range)
+
+inoremap <silent> <expr> <C-Space> coc#refresh()
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 nmap <silent> gd <Plug>(coc-definition)
@@ -199,12 +179,16 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> <Leader>rn <Plug>(coc-rename)
+nmap <silent> <Leader>ff <Plug>(coc-format)
 
 nmap <Space> <Plug>(easymotion-prefix)
 nmap <Plug>(easymotion-prefix)j <Plug>(easymotion-j)
 nmap <Plug>(easymotion-prefix)k <Plug>(easymotion-k)
 nmap <Plug>(easymotion-prefix)l <Plug>(easymotion-lineforward)
 nmap <Plug>(easymotion-prefix)h <Plug>(easymotion-linebackward)
+
+nmap <silent> <C-_> <Leader>c<Space>
+xmap <silent> <C-_> <Leader>c<Space>
 
 noremap <silent> <C-U> :call smooth_scroll#up(&scroll, 10, 2)<CR>
 noremap <silent> <C-D> :call smooth_scroll#down(&scroll, 10, 2)<CR>
@@ -218,10 +202,7 @@ augroup END
 
 augroup FileTypes
   autocmd!
-  " autocmd FileType c,cpp,cs inoremap ; <End>;
   autocmd FileType json syntax match Comment +\/\/.\+$+
 augroup END
-
-call s:ToggleBackground()
 
 " vim: foldmethod=marker: tabstop=8: softtabstop=2: shiftwidth=2: expandtab
